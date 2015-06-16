@@ -39,6 +39,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); ButterKnife.inject(this);
 
+
     }
     @OnClick(R.id.btn_fetch) void onClick (){
         startService(new Intent(this, CheckLocationService.class));
@@ -73,7 +74,7 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
          }
  }
 
-    private LocationListener GPSListener = new LocationListener() {
+    /*private LocationListener GPSListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) { locationManager.removeUpdates(GPSListener);
         }
@@ -86,5 +87,5 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
         @Override
         public void onProviderDisabled(String provider) { }
     };
-
+*/
 }

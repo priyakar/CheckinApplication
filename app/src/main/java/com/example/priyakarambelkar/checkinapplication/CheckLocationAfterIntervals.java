@@ -28,6 +28,7 @@ public class CheckLocationAfterIntervals extends TimerTask {
             Log.e("curr location", lastLocation.getLatitude() + " " + lastLocation.getLongitude());
         if (locationDifference < DISPLACEMENT) {
             Log.e("location", "im within radius");
+
         }
         } else {
             Log.e("location", "in else of display");
