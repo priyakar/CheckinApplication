@@ -22,18 +22,10 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class CheckLocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
-    private static final int PLAY_SERVICES_REQUEST = 1000;
     private static final String TAG = MainActivity.class.getSimpleName();
-    private Location lastLocation, currLocation;
     private GoogleApiClient apiClient;
     public static boolean hasCheckedIn = false;
-    Timer timer = new Timer();
     private static int UPDATE_INTERVAL = 3000;
-    private static int UPDATE_FAST_INTERVAL = 150000;
-    private static int DISPLACEMENT = 50;
-    double latIntrepid = 42.367266;
-    double longIntrepid = -71.080130;
-    float locationDifference = 0;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -150,9 +142,4 @@ public class CheckLocationService extends Service implements GoogleApiClient.Con
 
     }
 
-    public class BindService extends Binder {
-        CheckLocationService getService() {
-            return CheckLocationService.this;
-        }
-    }
 }
