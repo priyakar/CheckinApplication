@@ -31,18 +31,19 @@ public class MainActivity extends Activity implements GoogleApiClient.Connection
     double longIntrepid = -71.080130;
     float locationDifference =0;
     LocationManager locationManager;
-    @InjectView(R.id.display_location)
-    TextView displayLocation;
     @InjectView(R.id.btn_fetch)
     Button btnFetch;
+
+    //Intent intent;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); ButterKnife.inject(this);
-
+       // intent = new Intent(this, CheckLocationService.class);
 
     }
     @OnClick(R.id.btn_fetch) void onClick (){
-        startService(new Intent(this, CheckLocationService.class));
+
+         startService(new Intent(this, CheckLocationService.class));
     }
 
     @Override

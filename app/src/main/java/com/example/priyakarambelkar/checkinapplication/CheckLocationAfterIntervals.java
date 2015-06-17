@@ -7,16 +7,19 @@ import com.google.android.gms.location.LocationServices;
 import java.util.TimerTask;
 
 public class CheckLocationAfterIntervals extends TimerTask {
-    Location lastLocation, currLocation;
+    public Location lastLocation, currLocation;
     GoogleApiClient apiClient;
     double latIntrepid = 42.367266;
     double longIntrepid = -71.080130;
-    private static int DISPLACEMENT = 50;
+    float DISPLACEMENT = 50;
+    public static boolean chechIn = false;
     float locationDifference = 0;
-    public CheckLocationAfterIntervals (GoogleApiClient gApi ){
+
+    public CheckLocationAfterIntervals(GoogleApiClient gApi) {
         this.apiClient = gApi;
         run();
     }
+
     @Override
     public void run() {
         lastLocation = LocationServices.FusedLocationApi.getLastLocation(apiClient);
@@ -25,13 +28,13 @@ public class CheckLocationAfterIntervals extends TimerTask {
             currLocation.setLatitude(latIntrepid);
             currLocation.setLongitude(longIntrepid);
             locationDifference = lastLocation.distanceTo(currLocation);
-            Log.e("curr location", lastLocation.getLatitude() + " " + lastLocation.getLongitude());
-        if (locationDifference < DISPLACEMENT) {
-            Log.e("location", "im within radius");
+            if (locationDifference < DISPLACEMENT) {
+                Log.e("location", "im within radius");
+                chechIn = true;
+            } else {
+                Log.e("location", "in else of display");
+            }
 
-        }
-        } else {
-            Log.e("location", "in else of display");
         }
     }
 }
