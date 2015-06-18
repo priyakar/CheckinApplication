@@ -5,6 +5,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -102,7 +105,7 @@ public class CheckLocationService extends Service implements GoogleApiClient.Con
             notifyReceiver();
             Notification notification = new Notification.Builder(this)
                     .setAutoCancel(true)
-                    .setSmallIcon(R.drawable.slackicon)
+                    .setSmallIcon(R.drawable.notify)
                     .setContentTitle("Post your location on slack")
                     .setContentText("Would you like to post a notification on #whos-here?")
                     .addAction(R.drawable.yes, "YES", yesReceive)
