@@ -29,9 +29,11 @@ public class CheckLocationService extends Service implements GoogleApiClient.Con
     private static final String TAG = MainActivity.class.getSimpleName();
     private GoogleApiClient apiClient;
     public static boolean hasCheckedIn = false;
-    private static int UPDATE_INTERVAL = 3000;
+    private static int UPDATE_INTERVAL = 1000*60*15;
     private PendingIntent yesReceive;
     private PendingIntent noReceive;
+    public static NotificationManager notificationManager;
+    public static int notificationId = 0;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -101,56 +103,35 @@ public class CheckLocationService extends Service implements GoogleApiClient.Con
     void displayLocation() {
         CheckLocationAfterIntervals interval = new CheckLocationAfterIntervals(apiClient);
         Timer timer = new Timer();
-        timer.schedule(interval, UPDATE_INTERVAL, 1000*15*60);
-        /*if (CheckLocationAfterIntervals.chechIn && !hasCheckedIn) {
-            ServiceClass p = new ServiceClass("Finally, I made it!", "Priya");
-            ServiceManager.getSlackServiceInstatnce().postSlackMEssage(p, new Callback<Void>() {
-                @Override
-                public void success(Void aVoid, Response response) {
-                    hasCheckedIn = true;
-                }
-
-                @Override
-                public void failure(RetrofitError retrofitError) {
-
-                }
-            });
+        timer.schedule(interval, UPDATE_INTERVAL, 1000 * 15 * 60);
+        if (CheckLocationAfterIntervals.chechIn && !hasCheckedIn) {
             timer.cancel();
+            Log.e("check this out", "after timer cancel");
             stopSelf();
-        }*/
-        notifyReceiver();
-        Notification notification = new Notification.Builder(this)
-        .setSmallIcon(R.mipmap.ic_launcher)
-        .setContentTitle("Post your location on slack")
-        .setContentText("Would you like to post a notification on #whos-here?")
-        .addAction(R.mipmap.ic_launcher, "YES", yesReceive)
-        .addAction(R.mipmap.ic_launcher,"NO", noReceive)
-        .setOngoing(true)
-        .build();
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notification);
-
-
+            notifyReceiver();
+            Notification notification = new Notification.Builder(this)
+                    .setAutoCancel(true)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle("Post your location on slack")
+                    .setContentText("Would you like to post a notification on #whos-here?")
+                    .addAction(R.mipmap.ic_launcher, "YES", yesReceive)
+                    .addAction(R.mipmap.ic_launcher, "NO", noReceive).build();
+            notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.notify(0, notification);
+        }
     }
-
     private void notifyReceiver() {
         Intent postMsg = new Intent(getApplicationContext(), NotificationReceiver.class);
-        postMsg.setAction("POST_MSG");
-        Log.e("notify", "post msg");
-        sendBroadcast(postMsg);
+        postMsg.setAction("YES");
         yesReceive = PendingIntent.getBroadcast(this, 123, postMsg, PendingIntent.FLAG_UPDATE_CURRENT);
         Intent noPostMsg = new Intent(getApplicationContext(), NotificationReceiver.class);
-        noPostMsg.setAction("No_POST");
-        sendBroadcast(noPostMsg);
+        noPostMsg.setAction("NO");
         noReceive = PendingIntent.getBroadcast(this, 123, noPostMsg, PendingIntent.FLAG_UPDATE_CURRENT );
     }
-
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        Toast.makeText(getApplicationContext(), "service destroyed", Toast.LENGTH_SHORT).show();
     }
 
     @Override
