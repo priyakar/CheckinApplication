@@ -17,15 +17,15 @@ public class NotificationReceiver extends BroadcastReceiver {
         if ("YES".equals(action)) {
             Toast.makeText(context, "Notification Posted", Toast.LENGTH_SHORT).show();
             ServiceClass postMessage = new ServiceClass("Finally, I made it!", "Priya");
-            ServiceManager.getSlackServiceInstatnce().postSlackMessage(BuildConfig.SLACK_CHANNEL_URL_KEY, postMessage, new Callback<Void>() {
+            ServiceManager.getSlackServiceInstatnce().postSlackMessage(BuildConfig.SLACK_CHANNEL_URL_KEY, postMessage, new Callback<Object>() {
                 @Override
-                public void success(Void aVoid, Response response) {
+                public void success(Object aVoid, Response response) {
                     CheckLocationService.hasCheckedIn = true;
                 }
 
                 @Override
                 public void failure(RetrofitError retrofitError) {
-
+                    Log.e("retrofit erroe", retrofitError.getCause().toString());
                 }
             });
             CheckLocationService.notificationManager.cancel(0);

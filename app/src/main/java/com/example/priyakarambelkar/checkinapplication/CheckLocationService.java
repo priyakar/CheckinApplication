@@ -17,6 +17,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import java.util.Timer;
 
+import static com.example.priyakarambelkar.checkinapplication.R.drawable.slackicon;
+
 public class CheckLocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private GoogleApiClient apiClient;
@@ -100,11 +102,11 @@ public class CheckLocationService extends Service implements GoogleApiClient.Con
             notifyReceiver();
             Notification notification = new Notification.Builder(this)
                     .setAutoCancel(true)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.slackicon)
                     .setContentTitle("Post your location on slack")
                     .setContentText("Would you like to post a notification on #whos-here?")
-                    .addAction(R.mipmap.ic_launcher, "YES", yesReceive)
-                    .addAction(R.mipmap.ic_launcher, "NO", noReceive).build();
+                    .addAction(R.drawable.yes, "YES", yesReceive)
+                    .addAction(R.drawable.no, "NO", noReceive).build();
             notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             notificationManager.notify(0, notification);
         }

@@ -4,5 +4,10 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
     </style>
+    <style name="buttonFormatting">
+    <item name="android:typeface">monospace</item>
+        <item name="android:textSize">40dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
 
 </resources>
