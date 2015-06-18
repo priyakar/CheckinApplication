@@ -23,14 +23,12 @@
             android:name=".CheckLocationService"
             android:enabled="true" />
 
-        <activity
-            android:name=".TestActivity"
-            android:label="@string/title_activity_test" >
-        </activity>
-        <activity
-            android:name=".PostPostSlack"
-            android:label="@string/title_activity_post_post_slack" >
-        </activity>
+        <receiver android:name=".NotificationReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

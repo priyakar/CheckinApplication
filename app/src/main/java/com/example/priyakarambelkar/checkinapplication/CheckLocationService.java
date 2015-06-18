@@ -1,5 +1,8 @@
 package com.example.priyakarambelkar.checkinapplication;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
@@ -7,6 +10,7 @@ import android.location.LocationListener;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,6 +30,8 @@ public class CheckLocationService extends Service implements GoogleApiClient.Con
     private GoogleApiClient apiClient;
     public static boolean hasCheckedIn = false;
     private static int UPDATE_INTERVAL = 3000;
+    private PendingIntent yesReceive;
+    private PendingIntent noReceive;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -95,8 +101,8 @@ public class CheckLocationService extends Service implements GoogleApiClient.Con
     void displayLocation() {
         CheckLocationAfterIntervals interval = new CheckLocationAfterIntervals(apiClient);
         Timer timer = new Timer();
-        timer.schedule(interval, UPDATE_INTERVAL, 20000);
-        if (CheckLocationAfterIntervals.chechIn && !hasCheckedIn) {
+        timer.schedule(interval, UPDATE_INTERVAL, 1000*15*60);
+        /*if (CheckLocationAfterIntervals.chechIn && !hasCheckedIn) {
             ServiceClass p = new ServiceClass("Finally, I made it!", "Priya");
             ServiceManager.getSlackServiceInstatnce().postSlackMEssage(p, new Callback<Void>() {
                 @Override
@@ -111,7 +117,32 @@ public class CheckLocationService extends Service implements GoogleApiClient.Con
             });
             timer.cancel();
             stopSelf();
-        }
+        }*/
+        notifyReceiver();
+        Notification notification = new Notification.Builder(this)
+        .setSmallIcon(R.mipmap.ic_launcher)
+        .setContentTitle("Post your location on slack")
+        .setContentText("Would you like to post a notification on #whos-here?")
+        .addAction(R.mipmap.ic_launcher, "YES", yesReceive)
+        .addAction(R.mipmap.ic_launcher,"NO", noReceive)
+        .setOngoing(true)
+        .build();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notification);
+
+
+    }
+
+    private void notifyReceiver() {
+        Intent postMsg = new Intent(getApplicationContext(), NotificationReceiver.class);
+        postMsg.setAction("POST_MSG");
+        Log.e("notify", "post msg");
+        sendBroadcast(postMsg);
+        yesReceive = PendingIntent.getBroadcast(this, 123, postMsg, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent noPostMsg = new Intent(getApplicationContext(), NotificationReceiver.class);
+        noPostMsg.setAction("No_POST");
+        sendBroadcast(noPostMsg);
+        noReceive = PendingIntent.getBroadcast(this, 123, noPostMsg, PendingIntent.FLAG_UPDATE_CURRENT );
     }
 
 
