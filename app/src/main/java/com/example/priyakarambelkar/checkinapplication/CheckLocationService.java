@@ -7,23 +7,15 @@ import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
-import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-
 import java.util.Timer;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class CheckLocationService extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -33,7 +25,6 @@ public class CheckLocationService extends Service implements GoogleApiClient.Con
     private PendingIntent yesReceive;
     private PendingIntent noReceive;
     public static NotificationManager notificationManager;
-    public static int notificationId = 0;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -52,9 +43,7 @@ public class CheckLocationService extends Service implements GoogleApiClient.Con
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
-            Log.e("location", "play services 1");
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                Log.e("location", "play services 2");
             } else {
                 Toast.makeText(getApplicationContext(), "Device not supported", Toast.LENGTH_LONG).show();
             }

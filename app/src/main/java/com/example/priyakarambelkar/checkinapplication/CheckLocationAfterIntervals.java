@@ -33,6 +33,7 @@ public class CheckLocationAfterIntervals extends TimerTask {
                 chechIn = true;
             } else {
                 Log.e("location", "in else of display");
+                Log.e("location", lastLocation.toString()+",");
             }
 
         }

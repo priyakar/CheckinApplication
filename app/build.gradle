@@ -2,8 +2,15 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "23.0.0 rc2"
+    buildToolsVersion "22.0.1"
 
+    ext.localProperties = new Properties()
+    ext.localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    ext.getLocalProperty = { propertyName ->
+        def property = localProperties.getProperty(propertyName)
+        return property == null ? "" : property
+    }
     defaultConfig {
         applicationId "com.example.priyakarambelkar.checkinapplication"
         minSdkVersion 16
@@ -12,6 +19,10 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        all {
+            def slackChannelUrlKey = getLocalProperty("slack_channel_url_key")
+            buildConfigField "String", "SLACK_CHANNEL_URL_KEY", "\"$slackChannelUrlKey\""
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
